@@ -2,7 +2,7 @@ class Solution {
 public:
      int partitionString(string str){
          int ans=1;
-         set<char>s;
+         unordered_set<char>s;
          for(auto c:str){
              if(s.find(c)!=s.end()){
                  s.clear();
