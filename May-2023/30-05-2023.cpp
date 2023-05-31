@@ -1,33 +1,43 @@
 //C++ solution
-class MyHashSet {
-
-private:
-        vector<bool>mp;
+class UndergroundSystem {
 public:
-    MyHashSet() {
-        mp.resize(1000001,false);           
+        // id -> {station name,time}
+        unordered_map<int,pair<string,int>>checkInStation; 
+
+        // Route -> {total time,count}
+        unordered_map<string,pair<int,int>> checkOutStation;
+
+    UndergroundSystem() {
     }
     
-    void add(int key) {
-        mp[key]=true;   
-        
+    void checkIn(int id, string stationName, int t) {
+          checkInStation[id] = {stationName,t};
     }
     
-    void remove(int key) {
-        mp[key]=false;
-        
+    void checkOut(int id, string stationName, int t) {
+         
+          auto cIn = checkInStation[id];
+           checkInStation.erase(id);
+
+           string route = cIn.first + "_" + stationName;
+
+           checkOutStation[route].first += t - cIn.second;
+           checkOutStation[route].second += 1;  
     }
     
-    bool contains(int key) {
-        return mp[key];
-        
+    double getAverageTime(string startStation, string endStation) {
+          
+           string route  = startStation + "_" + endStation;
+           auto time = checkOutStation[route];
+
+        return (double)time.first/time.second;
     }
 };
 
 /**
- * Your MyHashSet object will be instantiated and called as such:
- * MyHashSet* obj = new MyHashSet();
- * obj->add(key);
- * obj->remove(key);
- * bool param_3 = obj->contains(key);
+ * Your UndergroundSystem object will be instantiated and called as such:
+ * UndergroundSystem* obj = new UndergroundSystem();
+ * obj->checkIn(id,stationName,t);
+ * obj->checkOut(id,stationName,t);
+ * double param_3 = obj->getAverageTime(startStation,endStation);
  */
